@@ -1,0 +1,29 @@
+{
+  "name": "kernelman/logs",
+  "description": "Logs library package for php language.",
+  "type": "library",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Kernel Huang",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Adapter\\": "src/Adapter",
+      "Exceptions\\": "src/Exceptions",
+      "Processor\\": "src/Processor",
+      "Services\\": "src/Services",
+      "Storage\\": "src/Storage",
+      "Models\\": "src/Models"
+    }
+  },
+  "minimum-stability": "dev"
+}
