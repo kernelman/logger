@@ -9,8 +9,6 @@
 
 namespace Models;
 
-use Adapter\ModelAdapter;
-
 /**
  * 日志系统模型
  *

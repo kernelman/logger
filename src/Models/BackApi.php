@@ -9,8 +9,6 @@
 
 namespace Models;
 
-use Adapter\ModelAdapter;
-
 /**
  * Class BackApi
  * BackApi模型
