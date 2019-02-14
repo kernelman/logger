@@ -16,4 +16,4 @@ use Adapter\ModelAdapter;
  * BackApi模型
  *
  */
-class BackApi extends ModelBase implements ModelAdapter {}
+class BackApi extends ModelBase {}

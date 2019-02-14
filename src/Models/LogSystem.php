@@ -17,4 +17,4 @@ use Adapter\ModelAdapter;
  * Class LogSystem
  * @package Models
  */
-class LogSystem extends ModelBase implements ModelAdapter {}
+class LogSystem extends ModelBase {}
