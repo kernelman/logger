@@ -7,9 +7,10 @@
  * Time: 10:35 PM
  */
 
-namespace Processor;
+namespace Logs\Processor;
 
 
+use Common\JsonFormat;
 use Exceptions\UnFormattedException;
 
 /**
@@ -25,12 +26,13 @@ class ExportTypes {
 
     /**
      * @param $models
+     * @param $level
      * @return false|string
      * @throws UnFormattedException
      */
-    public function json($models) {
-        $makes = $this->make($models);
-        return Formatted::toJson($makes);
+    public function json($models, $level) {
+        $makes = $this->make($models, $level);
+        return JsonFormat::toJson($makes);
     }
 
     /**
@@ -41,7 +43,7 @@ class ExportTypes {
     public function text($models, $level = 'debug') {
         $makes = $this->make($models, $level);
         if ($makes) {
-            return $this->build($makes);
+            return $this->build($makes, $level);
         }
 
         return false;
@@ -84,7 +86,21 @@ class ExportTypes {
      */
     private function makeInfo($models) {
         $makes  = [];
-        $info   = $models->content;
+        $info   = var_export($models->content, true);
+
+        if (is_array($info)) {
+
+            foreach ($info as $key => $value) {
+                $models->content = '{'  . $key . ':' . $value . '}';
+
+                $getVars    = get_object_vars($models);
+                $properties = array_keys(array_filter($getVars));
+
+                foreach ($properties as $property) {
+                    $makes[$key][$property] = $models->{$property};
+                }
+            }
+        }
 
         if (is_object($info)) {
 
@@ -144,19 +160,38 @@ class ExportTypes {
 
     /**
      * @param $makes
+     * @param $level
      * @return string
      */
-    private function build($makes) {
+    private function build($makes, $level) {
         $build = '';
 
-        foreach ($makes as $make) {
+        if (isset($makes['content']) && ($level == 'info')) {
 
             $content = '';
-            foreach ($make as $type => $value) {
-                $content .= $this->export($type, $value) ?: $this->export($type, $value);
+            foreach ($makes as $type => $value) {
+                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
+                /*
+                if (is_array($value) && $type = 'content') {
+                    $content .= $this->export($type, var_export($value, true)) ?: $this->export($type, var_export($value));
+                } else {
+                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
+                }
+                */
             }
-
             $build .= $content . PHP_EOL;
+
+        } else {
+
+            foreach ($makes as $make) {
+
+                $content = '';
+                foreach ($make as $type => $value) {
+                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
+                }
+
+                $build .= $content . PHP_EOL;
+            }
         }
 
         return $build;
