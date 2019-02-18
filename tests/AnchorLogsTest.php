@@ -24,7 +24,6 @@ class AnchorTest extends TestCase {
             'content'   => 'Anchor test level: debug.'
         ];
 
-
         try {
             $debug = Logs::debug($log);
             $this->assertEquals($debug, true);
