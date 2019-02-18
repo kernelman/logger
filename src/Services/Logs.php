@@ -28,11 +28,16 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function debug($logProperty) {
-        self::$level    = null;
-        self::$level    = Message::LOG_DEBUG;
-        $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
+        if (self::getEnable()) {
 
-        return self::process($property);
+            self::$level    = null;
+            self::$level    = Message::LOG_DEBUG;
+            $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
+
+            return self::process($property);
+        }
+
+        return false;
     }
 
     /**
@@ -43,11 +48,16 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function info($logProperty) {
-        self::$level    = null;
-        self::$level    = Message::LOG_INFO;
-        $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
+        if (self::getEnable()) {
 
-        return self::process($property);
+            self::$level = null;
+            self::$level = Message::LOG_INFO;
+            $property = is_array($logProperty) ? (object)$logProperty : $logProperty;
+
+            return self::process($property);
+        }
+
+        return false;
     }
 
     /**
@@ -58,38 +68,65 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function error($logProperty) {
-        self::$level    = null;
-        self::$level    = Message::LOG_ERROR;
-        $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
+        if (self::getEnable()) {
 
-        return self::process($property);
+            self::$level = null;
+            self::$level = Message::LOG_ERROR;
+            $property = is_array($logProperty) ? (object)$logProperty : $logProperty;
+
+            return self::process($property);
+        }
+
+        return false;
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function notice() {
-
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function warning() {
-
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function critical() {
-
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function alert() {
-
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function emergency() {
-
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function fatal() {
 
     }
 
+    /**
+     * @todo
+     * @return mixed|void
+     */
     public static function success() {
-
     }
 }

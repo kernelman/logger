@@ -94,6 +94,14 @@ trait Log {
     }
 
     /**
+     * @return mixed
+     */
+    private static function getEnable() {
+        $config = Config::logs();
+        return $config::get('enable');
+    }
+
+    /**
      * @param $property
      * @return mixed
      * @throws NotFoundException
