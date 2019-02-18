@@ -74,7 +74,7 @@ abstract class ModelBase implements ModelAdapter {
      * 设置日志记录时间
      */
     public function setTime() {
-        $this->timestamp = date('c', time());
+        $this->timestamp = date('Y-m-d H:i:s', time());
     }
 
     /**
