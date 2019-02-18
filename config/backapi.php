@@ -15,7 +15,7 @@ return (object)array(
     // Linux/Mac操作系统的日志文件绝对路径, 可根据服务器系统配置环境自定义
     'root'      => '/tmp/logs/',    // 日志根目录
     'name'      => 'BackApi',       // 业务系统名/日志目录名/日志DB名
-    'work'      => 'sync',          // sync or async, 日志写入方式(同步/异步)
+    'work'      => 'async',         // sync or async, 日志写入方式(同步/异步)
     'store'     => $service . 'File',  // file or elk or mongodb, 日志存储类型(文件/ELK/Mongodb)
     'models'    => $model,          // Models类命名空间
     'size'      => 2000,            // 设置日志文件大小阈值, 单位为MB, 日志文件大小超过这个设置将重新创建

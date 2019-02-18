@@ -1,6 +1,6 @@
 <?php
 /**
- * Class FileSyncProcedure
+ * Class FileSyncProcedureTest
  *
  * Author:  Kernel Huang
  * Mail:    kernelman79@gmail.com

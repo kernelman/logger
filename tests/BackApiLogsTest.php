@@ -1,6 +1,6 @@
 <?php
 /**
- * Class FileSyncProcedure
+ * Class BackApiLogsTest
  *
  * Author:  Kernel Huang
  * Mail:    kernelman79@gmail.com
@@ -13,15 +13,15 @@ namespace Tests;
 
 use Logs\Services\Logs;
 
-class AnchorTest extends TestCase {
+class BackApiLogsTest extends TestCase {
 
     public function testLogDebug() {
         $log = [
-            'schema'    => 'Anchor',
-            'module'    => 'stats',
+            'schema'    => 'BackApi',
+            'module'    => 'user',
             'statusCode'=> 404,
             'message'   => 'Request fail.',
-            'content'   => 'Anchor test level: debug.'
+            'content'   => 'BackApi test level: error.'
         ];
 
         try {
@@ -35,11 +35,11 @@ class AnchorTest extends TestCase {
 
     public function testLogError() {
         $log = [
-            'schema'    => 'Anchor',
-            'module'    => 'stats',
+            'schema'    => 'BackApi',
+            'module'    => 'user',
             'statusCode'=> 404,
             'message'   => 'Request fail.',
-            'content'   => 'Anchor test level: error.'
+            'content'   => 'BackApi test level: error.'
         ];
 
         try {
@@ -58,19 +58,19 @@ class AnchorTest extends TestCase {
      */
     public function testInfo() {
         $log            = new \stdClass();
-        $log->schema    = 'Anchor';
-        $log->module    = 'stats';
+        $log->schema    = 'BackApi';
+        $log->module    = 'user';
         $log->message   = 'Request fail.';
-        $log->content   = (object)['id' => 1, 'name' => 'anchor'];
+        $log->content   = (object)['id' => 1, 'name' => 'user'];
 
         $info = Logs::info($log);
         $this->assertEquals($info, true);
 
         $log            = new \stdClass();
-        $log->schema    = 'Anchor';
-        $log->module    = 'stats';
+        $log->schema    = 'BackApi';
+        $log->module    = 'user';
         $log->message   = 'Request fail.';
-        $log->content   = ['id' => 1, 'name' => 'anchor'];
+        $log->content   = ['id' => 1, 'name' => 'user'];
 
         $info = Logs::info($log);
         $this->assertEquals($info, true);
