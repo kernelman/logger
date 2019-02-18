@@ -7,8 +7,8 @@
  * Time: 1:57 PM
  */
 
-$service    = 'Services\\';
-$model      = 'Models\\';
+$service    = 'Logs\\Services\\';
+$model      = 'Logs\\Models\\';
 
 return (object)array(
 
@@ -19,7 +19,7 @@ return (object)array(
     'store'     => $service . 'File',  // file or elk or mongodb, 日志存储类型(文件/ELK/Mongodb)
     'models'    => $model,          // Models类命名空间
     'size'      => 2000,            // 设置日志文件大小阈值, 单位为MB, 日志文件大小超过这个设置将重新创建
-    'env'       => 'pro',           // 默认为pro，pro是生产环境，dev是开发环境
+    'env'       => 'dev',           // 默认为pro，pro是生产环境，dev是开发环境
 
     'module'    => (object)[        // 业务模块名/二级目录名/日志表名/
         'admin'     =>  'admin',    // 后台

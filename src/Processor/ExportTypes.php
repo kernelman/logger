@@ -11,6 +11,7 @@ namespace Logs\Processor;
 
 
 use Common\JsonFormat;
+use Common\Property;
 use Exceptions\UnFormattedException;
 
 /**
@@ -29,6 +30,7 @@ class ExportTypes {
      * @param $level
      * @return false|string
      * @throws UnFormattedException
+     * @throws \Exceptions\InvalidArgumentException
      */
     public function json($models, $level) {
         $makes = $this->make($models, $level);
@@ -39,6 +41,7 @@ class ExportTypes {
      * @param $models
      * @param string $level
      * @return bool|string
+     * @throws \Exceptions\InvalidArgumentException
      */
     public function text($models, $level = 'debug') {
         $makes = $this->make($models, $level);
@@ -52,6 +55,7 @@ class ExportTypes {
     /**
      * @param $models
      * @return array
+     * @throws \Exceptions\InvalidArgumentException
      */
     private function makeDebug($models) {
         $makes  = [];
@@ -66,11 +70,9 @@ class ExportTypes {
                 $models->methond = $class . $type . $function . '()';
             }
 
-            $models->file = $value['file'] ?? '';
-            $models->line = $value['line'] ?? '';
-
-            $getVars    = get_object_vars($models);
-            $properties = array_keys(array_filter($getVars));
+            $models->file   = $value['file'] ?? '';
+            $models->line   = $value['line'] ?? '';
+            $properties     = Property::filterNullProperty($models);
 
             foreach ($properties as $property) {
                 $makes[$key][$property] = $models->{$property};
@@ -83,48 +85,23 @@ class ExportTypes {
     /**
      * @param $models
      * @return array
+     * @throws \Exceptions\InvalidArgumentException
      */
     private function makeInfo($models) {
         $makes  = [];
-        $info   = var_export($models->content, true);
 
-        if (is_array($info)) {
+        if (is_array($models->content) || is_object($models->content)) {
+            $info = var_export($models->content, true);
 
-            foreach ($info as $key => $value) {
-                $models->content = '{'  . $key . ':' . $value . '}';
-
-                $getVars    = get_object_vars($models);
-                $properties = array_keys(array_filter($getVars));
-
-                foreach ($properties as $property) {
-                    $makes[$key][$property] = $models->{$property};
-                }
-            }
+        } else {
+            $info = $models->content;
         }
 
-        if (is_object($info)) {
+        $models->content = $info;
+        $properties = Property::filterNullProperty($models);
 
-            foreach ($info as $key => $value) {
-                $models->content = '{'  . $key . ':' . $value . '}';
-
-                $getVars    = get_object_vars($models);
-                $properties = array_keys(array_filter($getVars));
-
-                foreach ($properties as $property) {
-                    $makes[$key][$property] = $models->{$property};
-                }
-            }
-        }
-
-        if (is_string($info)) {
-            $models->content = $info;
-
-            $getVars    = get_object_vars($models);
-            $properties = array_keys(array_filter($getVars));
-
-            foreach ($properties as $property) {
-                $makes[$property] = $models->{$property};
-            }
+        foreach ($properties as $property) {
+            $makes[$property] = $models->{$property};
         }
 
         return $makes;
@@ -134,6 +111,7 @@ class ExportTypes {
      * @param $models
      * @param string $debug
      * @return array|bool
+     * @throws \Exceptions\InvalidArgumentException
      */
     private function make($models, $debug = 'debug') {
         if (!is_object($models)) {
@@ -170,14 +148,7 @@ class ExportTypes {
 
             $content = '';
             foreach ($makes as $type => $value) {
-                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
-                /*
-                if (is_array($value) && $type = 'content') {
-                    $content .= $this->export($type, var_export($value, true)) ?: $this->export($type, var_export($value));
-                } else {
-                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
-                }
-                */
+                $content .= $this->export($type, $value);
             }
             $build .= $content . PHP_EOL;
 
@@ -187,7 +158,7 @@ class ExportTypes {
 
                 $content = '';
                 foreach ($make as $type => $value) {
-                    $content .= $this->export($type, $value) ?: $this->export($type, $value);
+                    $content .= $this->export($type, $value);
                 }
 
                 $build .= $content . PHP_EOL;

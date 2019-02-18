@@ -7,7 +7,7 @@
  * Time: 10:11 PM
  */
 
-namespace Models;
+namespace Logs\Models;
 
 /**
  * Class BackApi

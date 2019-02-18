@@ -10,8 +10,7 @@
 namespace Tests;
 
 
-use PHPUnit\Framework\TestCase;
-use Processor\Config;
+use Services\Config;
 
 /**
  * Class ConfigTest

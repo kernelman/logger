@@ -9,8 +9,7 @@
 
 namespace Tests;
 
-use PHPUnit\Framework\TestCase;
-use Processor\Filename;
+use Logs\Processor\Filename;
 
 class FilenameTest extends TestCase {
 

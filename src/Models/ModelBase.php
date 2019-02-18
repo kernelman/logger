@@ -8,11 +8,11 @@
  * Time:    9:49 PM
  */
 
-namespace Models;
+namespace Logs\Models;
 
-use Adapter\ModelAdapter;
-use Services\ClientIp;
-use Processor\Config;
+use Logs\Adapter\ModelAdapter;
+use Common\ClientIp;
+use Services\Config;
 
 /**
  * 日志系统抽象基础模型
@@ -33,7 +33,6 @@ abstract class ModelBase implements ModelAdapter {
     public $message     = '';   // api提示消息
     public $user        = '';   // 用户账号
     public $runtime     = '';   // 运行时间
-    public $content     = '';   // 记录内容
     public $client      = '';   // pc/wap/app 获取客户端类型
     public $ip          = '';   // 客户端ip地址
     public $class       = '';   // 正在执行的类
@@ -42,6 +41,7 @@ abstract class ModelBase implements ModelAdapter {
     public $method      = '';   // 方法
     public $file        = '';   // 文件路径
     public $line        = '';   // 行数
+    public $content     = '';   // 记录内容
 
     /**
      * ModelBase constructor.

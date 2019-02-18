@@ -9,10 +9,10 @@
 
 namespace Logs\Models;
 
+
 /**
- * 日志系统模型
+ * Class Anchor
+ * Anchor模型
  *
- * Class LogSystem
- * @package Models
  */
-class LogSystem extends ModelBase {}
+class Anchor extends ModelBase {}

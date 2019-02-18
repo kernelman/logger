@@ -7,10 +7,12 @@
  * Time: 2:57 PM
  */
 
-namespace Processor;
+namespace Logs\Processor;
 
+use Common\Bytes;
 use Exceptions\InvalidArgumentException;
-use Storage\FileStore;
+use Services\Config;
+use Files\Sync\FileStore;
 
 class FileSize {
 

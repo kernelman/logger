@@ -11,12 +11,11 @@
 namespace Tests;
 
 
-use PHPUnit\Framework\TestCase;
-use Processor\FileSyncProcedure;
-use Storage\FileStore;
-use Processor\Config;
-use Processor\FileSize;
-use Processor\Filename;
+use Files\Sync\FileStore;
+use Logs\Processor\Filename;
+use Logs\Processor\FileSize;
+use Logs\Processor\FileSyncProcedure;
+use Services\Config;
 
 class FileSyncProcedureTest extends TestCase {
 
@@ -24,7 +23,7 @@ class FileSyncProcedureTest extends TestCase {
         $schema     = 'LogSystem';
         $module     = 'tests';
         $config     = Config::{$schema}();
-        $moduleName = $config::get('module')::next($module);
+        $moduleName = $config::find('module')::next($module);
         $filename   = $config::get('root') . strtolower($config::get('name')) . '/' . Filename::{$moduleName}();
         $content    = 'FileStore test procedure.' . PHP_EOL;
 

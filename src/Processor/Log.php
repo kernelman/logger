@@ -8,10 +8,11 @@
  * Time:    3:32 PM
  */
 
-namespace Processor;
+namespace Logs\Processor;
 
 
 use Exceptions\NotFoundException;
+use Services\Config;
 
 trait Log {
 
@@ -22,6 +23,8 @@ trait Log {
      * @param $property
      * @return bool
      * @throws NotFoundException
+     * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\UnFormattedException
      */
     public static function process($property) {
         self::$env      = null;
@@ -105,11 +108,20 @@ trait Log {
         throw new NotFoundException('Class: ' . $store);
     }
 
+    /**
+     * Export data formatting.
+     *
+     * @param object $models
+     * @param ExportTypes $export
+     * @return bool|false|string
+     * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\UnFormattedException
+     */
     private static function export($models, ExportTypes $export) {
         $content = '';
 
         if (self::$env === 'pro') {
-            $content = $export->json($models);
+            $content = $export->json($models, self::$level);
         }
 
         if (self::$env === 'dev') {
@@ -119,6 +131,12 @@ trait Log {
         return $content;
     }
 
+    /**
+     * Instance log models.
+     *
+     * @param $property
+     * @return mixed
+     */
     private static function models($property) {
         $models     = self::getConfig($property, 'models');
         $instance   = $models . $property->schema;

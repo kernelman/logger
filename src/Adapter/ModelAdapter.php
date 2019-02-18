@@ -8,7 +8,7 @@
  * Time:    9:51 PM
  */
 
-namespace Adapter;
+namespace Logs\Adapter;
 
 
 /**

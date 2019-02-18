@@ -13,7 +13,7 @@ namespace Logs\Processor;
 use Exceptions\UnsavedException;
 use Exceptions\InvalidArgumentException;
 use Exceptions\UnWritableException;
-use Files\Sync\FileStore;
+use Files\Async\FileAsyncStore;
 
 /**
  * 文件同步写存储过程
@@ -21,7 +21,7 @@ use Files\Sync\FileStore;
  * Class FileSyncProcedure
  * @package Processor
  */
-class FileSyncProcedure {
+class FileAsyncProcedure {
 
     private $size       = null;
     private $file       = null;
@@ -58,6 +58,7 @@ class FileSyncProcedure {
      * @throws UnWritableException
      * @throws UnsavedException
      * @throws \Exceptions\AlreadyExistsException
+     * @throws \Exceptions\NotFoundException
      * @throws \Exceptions\UnExecutableException
      * @throws \Exceptions\UnReadableException
      */
@@ -73,12 +74,13 @@ class FileSyncProcedure {
      * @throws UnWritableException
      * @throws UnsavedException
      * @throws \Exceptions\AlreadyExistsException
+     * @throws \Exceptions\NotFoundException
      * @throws \Exceptions\UnExecutableException
      * @throws \Exceptions\UnReadableException
      */
     private function files() {
         if ($this->size && $this->file) {
-            $save = FileStore::save($this->filename, $this->content);
+            $save = FileAsyncStore::save($this->filename, $this->content);
 
             if ($save) {
                 return true;
@@ -99,7 +101,7 @@ class FileSyncProcedure {
         try {
 
             if ($this->size && !$this->file && $this->buildDir()) {
-                $save = FileStore::save($this->filename, $this->content);
+                $save = FileAsyncStore::save($this->filename, $this->content);
 
                 if ($save) {
                     return true;
@@ -124,7 +126,7 @@ class FileSyncProcedure {
         try {
 
             if (!$this->size && $this->file && $this->rebuildFile()) {
-                $save = FileStore::save($this->filename, $this->content);
+                $save = FileAsyncStore::save($this->filename, $this->content);
 
                 if ($save) {
                     return true;
@@ -146,10 +148,10 @@ class FileSyncProcedure {
     private function buildParentDir() {
         try {
             $parentDir          = dirname(dirname($this->filename));
-            $checkParentDir     = FileStore::checkDir($parentDir);
+            $checkParentDir     = FileAsyncStore::checkDir($parentDir);
 
             if (!$checkParentDir) {
-                $createParentDir = FileStore::createDir($parentDir);
+                $createParentDir = FileAsyncStore::createDir($parentDir);
 
                 if ($createParentDir) {
                     return true;
@@ -173,10 +175,10 @@ class FileSyncProcedure {
     private function buildCurrentDir() {
         try {
             $currentDir         = dirname($this->filename);
-            $checkCurrentDir    = FileStore::checkDir($currentDir);
+            $checkCurrentDir    = FileAsyncStore::checkDir($currentDir);
 
             if (!$checkCurrentDir) {
-                $createCurrentDir = FileStore::createDir($currentDir);
+                $createCurrentDir = FileAsyncStore::createDir($currentDir);
 
                 if ($createCurrentDir) {
                     return true;
@@ -211,7 +213,7 @@ class FileSyncProcedure {
     private function rebuildFile() {
         try {
             $newFiles   = $this->filename . Filename::now();
-            $rebuild    = FileStore::moveFile($this->filename, $newFiles);
+            $rebuild    = FileAsyncStore::moveFile($this->filename, $newFiles);
 
             if ($rebuild) {
                 return true;

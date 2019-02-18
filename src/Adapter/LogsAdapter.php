@@ -7,7 +7,7 @@
  * Time: 12:23 PM
  */
 
-namespace Adapter;
+namespace Logs\Adapter;
 
 /**
  * Interface LogsAdapter

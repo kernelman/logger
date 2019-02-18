@@ -7,15 +7,16 @@
  * Time: 1:34 PM
  */
 
-namespace Services;
+namespace Logs\Services;
 
 
-use Adapter\StorageAdapter;
-use Processor\Config;
-use Processor\FileSyncProcedure;
-use Processor\FileSize;
-use Processor\Filename;
-use Storage\FileStore;
+use Files\Sync\FileStore;
+use Logs\Adapter\StorageAdapter;
+use Logs\Processor\FileAsyncProcedure;
+use Logs\Processor\FileSyncProcedure;
+use Logs\Processor\FileSize;
+use Logs\Processor\Filename;
+use Services\Config;
 
 class File implements StorageAdapter {
 
@@ -40,8 +41,8 @@ class File implements StorageAdapter {
         self::$module   = $module;
 
         $config         = Config::{self::$schema}();
-        $name           = $config::get('module')::next(self::$module);
-        self::$filename = $config::get('root') . $config::get('name') . '/' . Filename::{$name}();
+        $name           = $config::find('module')::next(self::$module);
+        self::$filename = $config::get('root') . strtolower($config::get('name')) . '/' . Filename::{$name}();
         self::$type     = $config::get('work');
 
         return self::class;
@@ -54,6 +55,7 @@ class File implements StorageAdapter {
      * @return bool|mixed
      * @throws \Exceptions\AlreadyExistsException
      * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\NotFoundException
      * @throws \Exceptions\UnExecutableException
      * @throws \Exceptions\UnReadableException
      * @throws \Exceptions\UnWritableException
@@ -62,6 +64,11 @@ class File implements StorageAdapter {
     public static function save($content) {
         if (self::$type === 'sync') {
             $store = new FileSyncProcedure(self::checkSize(), self::checkFile(), self::$filename, $content);
+            return $store->begin();
+        }
+
+        if (self::$type === 'async') {
+            $store = new FileAsyncProcedure(self::checkSize(), self::checkFile(), self::$filename, $content);
             return $store->begin();
         }
 

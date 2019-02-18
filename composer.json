@@ -13,18 +13,19 @@
     "php": "^7.1.3",
     "kernelman/exceptions" : ">=1.0.0",
     "kernelman/services" : ">=1.0.0",
-    "kernelman/message" : ">=1.0.0"
+    "kernelman/message" : ">=1.0.0",
+    "kernelman/files" : ">=1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7.0"
   },
   "autoload": {
     "psr-4": {
-      "Adapter\\": "src/Adapter",
-      "Processor\\": "src/Processor",
-      "Services\\": "src/Services",
-      "Storage\\": "src/Storage",
-      "Models\\": "src/Models"
+      "Logs\\Adapter\\": "src/Adapter",
+      "Logs\\Processor\\": "src/Processor",
+      "Logs\\Services\\": "src/Services",
+      "Logs\\Models\\": "src/Models",
+      "Tests\\": "tests/"
     }
   },
   "minimum-stability": "dev"

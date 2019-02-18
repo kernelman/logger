@@ -7,12 +7,12 @@
  * Time: 1:06 PM
  */
 
-namespace Services;
+namespace Logs\Services;
 
-use Adapter\LogsAdapter;
 use Exceptions\NotFoundException;
-use Processor\Log;
-use Processor\Message;
+use Message\Message;
+use Logs\Adapter\LogsAdapter;
+use Logs\Processor\Log;
 
 class Logs implements LogsAdapter {
 
@@ -24,39 +24,45 @@ class Logs implements LogsAdapter {
      * @param $logProperty
      * @return bool|mixed
      * @throws NotFoundException
+     * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\UnFormattedException
      */
     public static function debug($logProperty) {
         self::$level    = null;
         self::$level    = Message::LOG_DEBUG;
         $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
 
-        return Log::process($property);
+        return self::process($property);
     }
 
     /**
      * @param $logProperty
      * @return bool|mixed
      * @throws NotFoundException
+     * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\UnFormattedException
      */
     public static function info($logProperty) {
         self::$level    = null;
         self::$level    = Message::LOG_INFO;
         $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
 
-        return Log::process($property);
+        return self::process($property);
     }
 
     /**
      * @param $logProperty
      * @return bool|mixed
      * @throws NotFoundException
+     * @throws \Exceptions\InvalidArgumentException
+     * @throws \Exceptions\UnFormattedException
      */
     public static function error($logProperty) {
         self::$level    = null;
         self::$level    = Message::LOG_ERROR;
         $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
 
-        return Log::process($property);
+        return self::process($property);
     }
 
     public static function notice() {

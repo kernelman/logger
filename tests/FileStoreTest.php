@@ -11,11 +11,10 @@ namespace Tests;
 
 
 use Exceptions\UnWritableException;
-use PHPUnit\Framework\TestCase;
-use Storage\FileStore;
-use Processor\Config;
-use Processor\FileSize;
-use Processor\Filename;
+use Files\Sync\FileStore;
+use Logs\Processor\FileSize;
+use Logs\Processor\Filename;
+use Services\Config;
 
 /**
  * Test files are stored
@@ -79,7 +78,7 @@ class FileStoreTest extends TestCase {
         $schema     = 'LogSystem';
         $module     = 'tests';
         $config     = Config::{$schema}();
-        $moduleName = $config::get('module')::next($module);
+        $moduleName = $config::find('module')::next($module);
         $filename   = $config::get('root') . $config::get('name') . '/' . Filename::{$moduleName}();
         $content    = 'FileStore test save.' . PHP_EOL;
 

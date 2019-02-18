@@ -7,7 +7,7 @@
  * Time: 2:43 PM
  */
 
-namespace Processor;
+namespace Logs\Processor;
 
 /**
  * Class FilenameProcessor

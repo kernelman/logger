@@ -9,8 +9,7 @@
 
 namespace Tests;
 
-use PHPUnit\Framework\TestCase;
-use Processor\FileSize;
+use Logs\Processor\FileSize;
 
 class FileSizeTest extends TestCase {
 
