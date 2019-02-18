@@ -144,7 +144,7 @@ class ExportTypes {
     private function build($makes, $level) {
         $build = '';
 
-        if (isset($makes['content']) && ($level == 'info')) {
+        if ($level == 'info') {
 
             $content = '';
             foreach ($makes as $type => $value) {
