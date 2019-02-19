@@ -100,7 +100,7 @@ abstract class ModelBase implements ModelAdapter {
      */
     public function setStatusCode() {
         if ($this->statusCode == '') {
-            $this->statusCode = Config::statusCode()::get($this->level);
+            $this->statusCode = Config::logs()::find('statusCode')::next($this->level);
         }
     }
 
