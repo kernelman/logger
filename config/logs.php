@@ -8,7 +8,9 @@
  */
 
 return (object)array(
+    'show'          => true,
     'enable'        => true,
+
     'statusCode'    => [
         'success'   => 4000,
         'debug'     => 4001,

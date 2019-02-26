@@ -28,16 +28,14 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function debug($logProperty) {
-        if (self::getEnable()) {
-
-            self::$level    = null;
-            self::$level    = Message::LOG_DEBUG;
-            $property       = is_array($logProperty) ? (object)$logProperty : $logProperty;
-
-            return self::process($property);
+        if (!self::getEnable() && !self::getShow()) {
+            return false;
         }
 
-        return false;
+        self::$level    = null;
+        self::$level    = Message::LOG_DEBUG;
+
+        return self::process($logProperty);
     }
 
     /**
@@ -48,16 +46,14 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function info($logProperty) {
-        if (self::getEnable()) {
-
-            self::$level = null;
-            self::$level = Message::LOG_INFO;
-            $property = is_array($logProperty) ? (object)$logProperty : $logProperty;
-
-            return self::process($property);
+        if (!self::getEnable() && !self::getShow()) {
+            return false;
         }
 
-        return false;
+        self::$level = null;
+        self::$level = Message::LOG_INFO;
+
+        return self::process($logProperty);
     }
 
     /**
@@ -68,16 +64,14 @@ class Logs implements LogsAdapter {
      * @throws \Exceptions\UnFormattedException
      */
     public static function error($logProperty) {
-        if (self::getEnable()) {
-
-            self::$level = null;
-            self::$level = Message::LOG_ERROR;
-            $property = is_array($logProperty) ? (object)$logProperty : $logProperty;
-
-            return self::process($property);
+        if (!self::getEnable() && !self::getShow()) {
+            return false;
         }
 
-        return false;
+        self::$level = null;
+        self::$level = Message::LOG_ERROR;
+
+        return self::process($logProperty);
     }
 
     /**

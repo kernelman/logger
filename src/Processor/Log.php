@@ -11,13 +11,17 @@
 namespace Logs\Processor;
 
 
+use Common\Export;
+use Common\Property;
 use Exceptions\NotFoundException;
 use Services\Config;
 
 trait Log {
 
-    protected static $env     = null;
-    protected static $level   = null;
+    protected static $env       = null;
+    protected static $level     = null;
+    protected static $show      = null;
+    protected static $enable    = null;
 
     /**
      * @param $property
@@ -37,36 +41,28 @@ trait Log {
             $models     = self::models($property);
             $content    = self::export($models, new ExportTypes());
 
-            return $store::save($content);
+            $export         = new Export();
+            $export->show   = self::$show;
+            $export->save   = self::$enable;
+
+            $export->show($content);
+            return $export->save($store, 'save', $content);
         }
 
         return false;
     }
 
     /**
-     * 判断日志模型属性是否存在
+     * 检查日志模型和模块属性是否存在
      *
-     * @param $object
-     * @param $property
-     * @return mixed
-     * @throws NotFoundException
-     */
-    private static function property($object, $property) {
-        if (property_exists($object, $property)) {
-            return true;
-        }
-
-        throw new NotFoundException($property . self::NOT_FOUND . 'logs');
-    }
-
-    /**
-     * @param $property
+     * @param object $property
      * @return bool
      * @throws NotFoundException
+     * @throws \Exceptions\InvalidArgumentException
      */
     private static function verify($property) {
-        $schema = self::property($property, 'schema');
-        $module = self::property($property, 'module');
+        $schema = Property::isPropertyAndObject($property, 'schema');
+        $module = Property::isPropertyAndObject($property, 'module');
 
         if ($schema && $module) {
             return true;
@@ -94,11 +90,23 @@ trait Log {
     }
 
     /**
+     * Get enable log
+     *
      * @return mixed
      */
     private static function getEnable() {
         $config = Config::logs();
-        return $config::get('enable');
+        return self::$enable = $config::get('enable');
+    }
+
+    /**
+     * Get show log
+     *
+     * @return mixed
+     */
+    private static function getShow() {
+        $config = Config::logs();
+        return self::$show = $config::get('show');
     }
 
     /**
@@ -143,12 +151,17 @@ trait Log {
      * Instance log models.
      *
      * @param $property
-     * @return mixed
+     * @return bool
+     * @throws NotFoundException
      */
     private static function models($property) {
         $models     = self::getConfig($property, 'models');
         $instance   = $models . $property->schema;
 
-        return new $instance($property, self::$level, self::$env);
+        if (Property::isExistsNamespace($instance)) {
+            return new $instance($property, self::$level, self::$env);
+        }
+
+        return false;
     }
 }
